@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BestellApp</title>
+    <script src="./scripts/database.js" defer></script>
+    <script src="./scripts/script.js" defer></script>
+    <script src="./scripts/templates.js" defer></script>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/basket.css">
+</head>
+
+<body onload="startMenu()">
+
+    <header class="main-header">
+        <h1 class="app-title">BestellApp</h1>
+        <span id="cart-badge" style="display: none;" class="cart-badge"></span>
+
+    </header>
+
+    <main id="menu_sections" class="menu-sections"></main>
+
+    <aside id="cart_sidebar" class="cart-sidebar">
+        <h2>Warenkorb</h2>
+        <div id="cart_content" class="cart-content"></div>
+        <div id="cart_total" class="cart-total"></div>
+        <div class="cart-buttons">
+            <button onclick="clearShoppingCart()">Löschen</button>
+            <button onclick="placeOrder()">Bestellen</button>
+        </div>
+    </aside>
+
+    <div id="thanks-popup" class="popup-backdrop" style="display: none;">
+        <div class="popup-thanks">
+            <h2>Vielen Dank für Ihre Bestellung!</h2>
+            <p>Ihre Bestellung wird nun zubereitet.</p>
+            <button onclick="hidePopup('thanks-popup')">OK</button>
+        </div>
+    </div>
+
+    <section class="cart-mobile">
+        <div id="cart_content_responsive" class="cart-content"></div>
+        <div id="cart_total_responsive" class="cart-total"></div>
+    </section>
+
+    <footer>2025 made by Marcel Többen</footer>
+
+</body>
+
+</html>
