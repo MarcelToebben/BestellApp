@@ -18,6 +18,13 @@ function startMenu() {
     }
 
     updateCartDisplay();
+
+    // burger-menu links generieren
+    let burgerMenu = '';
+    for (let i = 0; i < menu.length; i++) {
+        burgerMenu += `<a href="#dish_image_${i}">${menu[i].title}</a>`;
+    }
+    document.getElementById('burger-menu').innerHTML = burgerMenu;
 }
 
 //menge im warenkorb erhöhen, wenn keins drin ist neues gericht mit menge 1 hinzufügen und danach den warenkorb aktualisieren 
@@ -118,3 +125,30 @@ function hidePopup(id) {
     }
 }
 
+function toggleBurgerMenu() {
+    let menu = document.getElementById('burger-menu');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
+}
+
+// burger-menu automatisch schließen wenn ein link geklickt wird
+document.addEventListener('click', function (event) {
+    const burgerMenu = document.getElementById('burger-menu');
+    const burgerButton = document.getElementById('burger-button');
+
+    const clickedInsideMenu = burgerMenu.contains(event.target);
+    const clickedBurgerButton = burgerButton.contains(event.target);
+
+    // Wenn das Menü offen ist, und man NICHT im Menü oder auf dem Button klickt → Menü schließen
+    if (burgerMenu.style.display === 'block' && !clickedInsideMenu && !clickedBurgerButton) {
+        burgerMenu.style.display = 'none';
+    }
+
+    // Wenn man auf einen Link im Burger-Menü klickt → Menü schließen
+    if (event.target.closest('#burger-menu a')) {
+        burgerMenu.style.display = 'none';
+    }
+});

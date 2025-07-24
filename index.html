@@ -10,15 +10,22 @@
     <script src="./scripts/templates.js" defer></script>
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="./styles/basket.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Figtree:ital,wght@0,300..900;1,300..900&family=Manufacturing+Consent&family=My+Soul&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Shadows+Into+Light&family=Twinkle+Star&family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body onload="startMenu()">
 
     <header class="main-header">
         <h1 class="app-title">BestellApp</h1>
+        <div class="burger" onclick="toggleBurgerMenu()">☰</div>
+        <nav id="burger-menu" class="burger-menu"></nav>
         <span id="cart-badge" style="display: none;" class="cart-badge"></span>
-
     </header>
+
 
     <main id="menu_sections" class="menu-sections"></main>
 
