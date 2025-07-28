@@ -1,16 +1,29 @@
+.content-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
 .cart-sidebar {
-  position: fixed;
-  right: 0;
+  position: sticky;
   width: 300px;
-  height: auto;
-  max-height: 370px;
   background-color: #fff;
   border-left: 1px solid #ddd;
   padding: 20px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
-  z-index: 1000;
-  top: 396px;
+  height: fit-content;
+  align-self: flex-start;
+  margin-left: auto;
+  max-height: 750px;
+}
+
+.menu-sections {
+  flex: 1;
 }
 
 .cart-sidebar h2 {
@@ -31,6 +44,7 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  padding-top: 8px;
 }
 
 .cart-buttons button {
@@ -137,6 +151,7 @@
   padding: 20px;
   border-radius: 10px;
   position: relative;
+  text-align: start;
 }
 
 #cart-badge {

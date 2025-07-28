@@ -1,3 +1,4 @@
 .burger-menu a:hover {
     color: orange;
+    cursor: pointer;
 }

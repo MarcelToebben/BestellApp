@@ -22,7 +22,9 @@
 
 <body onload="startMenu()" onclick="handleBurgerMenuClick(event)">
     <header class="main-header">
-        <img src="./assets/icons/Logo.png" alt="BestellApp Logo" class="header-logo">
+        <a href="#" class="logo-link">
+            <img src="./assets/icons/Logo.png" alt="BestellApp Logo" class="header-logo">
+        </a>
         <div class="burger" onclick="toggleBurgerMenu()">☰</div>
         <nav id="burger-menu" class="burger-menu"></nav>
         <span id="cart-badge" style="display: none;" class="cart-badge"></span>
@@ -33,27 +35,32 @@
         <img class="hero-background" src="./assets/img/spaghetti-big.jpg">
     </section>
 
-    <section class="fancyKitchen-description">
-        <p>Lieferkosten: 4,99€</p>
-        <p>(ab 25€ Bestellwert gratis)</p>
-        <p>Lieferzeit: 30-45 Min.</p>
-        <p>Bewertung: &#9733 &#9733 &#9733 &#9733 &#9733</p>
-    </section>
-    <main id="menu_sections" class="menu-sections"></main>
+    <div class="content-wrapper">
+        <main class="menu-sections">
+            <section class="fancyKitchen-description">
+                <p>Lieferkosten: 4,99€</p>
+                <p>(ab 25€ Bestellwert gratis)</p>
+                <p>Lieferzeit: 30-45 Min.</p>
+                <p>Bewertung: &#9733 &#9733 &#9733 &#9733 &#9733</p>
+            </section>
 
-    <aside id="cart_sidebar" class="cart-sidebar">
-        <div id="cart_overlay_mobile" class="cart-mobile-overlay"></div>
-        <h2>Warenkorb</h2>
-        <div id="cart_content" class="cart-content"></div>
-        <div id="cart_total" class="cart-total"></div>
-        <div class="cart-buttons">
-            <button onclick="clearShoppingCart()">Löschen</button>
-            <button onclick="placeOrder()">Bestellen</button>
-        </div>
-    </aside>
+            <section id="menu_sections"></section>
 
-    <div id="thanks-popup" class="popup-backdrop" style="display: none;">
-        <div class="popup-thanks">
+        </main>
+
+        <aside id="cart_sidebar" class="cart-sidebar">
+            <div id="cart_overlay_mobile" class="cart-mobile-overlay"></div>
+            <h2>Warenkorb</h2>
+            <div id="cart_content" class="cart-content"></div>
+            <div id="cart_total" class="cart-total"></div>
+            <div class="cart-buttons">
+                <button onclick="clearShoppingCart()">Löschen</button>
+                <button onclick="placeOrder()">Bestellen</button>
+            </div>
+        </aside>
+    </div>
+    <div id="thanks-popup" class="popup-backdrop" style="display: none;" onclick="closeThanksPopupIfOutside(event)">
+        <div class="popup-thanks" onclick="event.stopPropagation()">
             <h2>Vielen Dank für Ihre Bestellung!</h2>
             <p>Ihre Bestellung wird nun bearbeitet.</p>
             <button onclick="hidePopup('thanks-popup')">OK</button>

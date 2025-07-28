@@ -112,9 +112,8 @@ main {
     box-shadow: 0 0 1px rgba(0, 0, 0, 1);
 }
 
-.dish-section {
-    padding-left: 12px;
-    padding-right: 12px;
+.dish-title {
+  scroll-margin-top: 70px;
 }
 
 main {
@@ -133,7 +132,6 @@ main {
     justify-content: space-between;
     align-items: flex-start;
     position: relative;
-    max-width: 800px;
     background-color: white;
 }
 
@@ -158,8 +156,8 @@ main {
 }
 
 .cart-sidebar {
-    top: 96px;
-    height: calc(100vh - 96px);
+    top: 76px;
+    height: calc(100vh - 76px);
 }
 
 .burger {

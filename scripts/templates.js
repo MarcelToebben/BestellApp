@@ -1,8 +1,8 @@
 function generateMenuSection(category, index) {
-    return /*html*/ `
+  return /*html*/ `
     <section class="dish-section">
-      <h2 class="dish-title">${category.title}</h2>
-      <div class="dish-image-container" id="dish_image_${index}">
+      <h2 id="dish_title_${index}" class="dish-title">${category.title}</h2>
+      <div class="dish-image-container">
         <img src="${category.image}" alt="${category.title}" class="dish-image">
       </div>
       <div id="dish_description_${index}" class="dish-list"></div>
@@ -11,7 +11,7 @@ function generateMenuSection(category, index) {
 }
 
 function generateDishItem(item) {
-    return /*html*/ `
+  return /*html*/ `
     <div class="dish-item">
       <div class="dish-content">
         <h3 class="dish-name">${item.name}</h3>
@@ -24,7 +24,7 @@ function generateDishItem(item) {
 }
 
 function generateCartItem(dish) {
-    return `
+  return `
         <div class="cart-item">
             <div class="cart-info">
                 <span>${dish.name}</span>

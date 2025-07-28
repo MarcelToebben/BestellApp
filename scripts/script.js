@@ -1,12 +1,22 @@
 let shoppingCart = [];
 
 function startMenu() {
+    loadCartFromLocalStorage();
+    renderMenuSections();
+    renderMenuDishes();
+    updateCartDisplay();
+    renderBurgerMenu();
+}
+
+function renderMenuSections() {
     let menuHTML = '';
     for (let i = 0; i < menu.length; i++) {
         menuHTML += generateMenuSection(menu[i], i);
     }
     document.getElementById('menu_sections').innerHTML = menuHTML;
+}
 
+function renderMenuDishes() {
     for (let i = 0; i < menu.length; i++) {
         let dishes = menu[i].items;
         let dishHTML = '';
@@ -15,12 +25,12 @@ function startMenu() {
         }
         document.getElementById('dish_description_' + i).innerHTML = dishHTML;
     }
+}
 
-    updateCartDisplay();
-
+function renderBurgerMenu() {
     let burgerMenu = '';
     for (let i = 0; i < menu.length; i++) {
-        burgerMenu += `<a href="#dish_image_${i}">${menu[i].title}</a>`;
+        burgerMenu += `<a href="#dish_title_${i}">${menu[i].title}</a>`;
     }
     document.getElementById('burger-menu').innerHTML = burgerMenu;
 }
@@ -36,6 +46,7 @@ function addDishToCart(name, price) {
     if (!found) {
         shoppingCart.push({ name: name, price: price, amount: 1 });
     }
+    saveCartToLocalStorage();
     updateCartDisplay();
 }
 
@@ -49,6 +60,7 @@ function removeDishFromCart(name, price) {
             break;
         }
     }
+    saveCartToLocalStorage();
     updateCartDisplay();
 }
 
@@ -62,26 +74,46 @@ function updateCartDisplay() {
 function updateCartContent() {
     let cartArea = document.getElementById('cart_content');
     let totalArea = document.getElementById('cart_total');
+
+    let { html, total } = generateCartHTML();
+
+    cartArea.innerHTML = html;
+    totalArea.innerHTML = 'Gesamtpreis: ' + total.toFixed(2).replace('.', ',') + ' €';
+}
+
+function generateCartHTML() {
     let html = '';
     let total = 0;
 
     if (shoppingCart.length === 0) {
         html = 'Nichts ausgewählt.';
     } else {
-        for (let i = 0; i < shoppingCart.length; i++) {
-            html += generateCartItem(shoppingCart[i]);
-            total += shoppingCart[i].price * shoppingCart[i].amount;
-        }
-        if (total < 25) {
-            total += 4.99;
-            html += `<div class="delivery-cost">Lieferkosten: 4,99 €</div>`;
-        } else {
-            html += `<div class="delivery-cost free">Lieferkosten: Kostenlos</div>`;
-        }
+        ({ html, total } = buildCartItemsAndTotal());
+        html += generateDeliveryCostHTML(total);
+        if (total < 25) total += 4.99;
     }
 
-    cartArea.innerHTML = html;
-    totalArea.innerHTML = 'Gesamtpreis: ' + total.toFixed(2).replace('.', ',') + ' €';
+    return { html, total };
+}
+
+function buildCartItemsAndTotal() {
+    let html = '';
+    let total = 0;
+
+    for (let i = 0; i < shoppingCart.length; i++) {
+        html += generateCartItem(shoppingCart[i]);
+        total += shoppingCart[i].price * shoppingCart[i].amount;
+    }
+
+    return { html, total };
+}
+
+function generateDeliveryCostHTML(total) {
+    if (total < 25) {
+        return `<div class="delivery-cost">Lieferkosten: 4,99 €</div>`;
+    } else {
+        return `<div class="delivery-cost free">Lieferkosten: Kostenlos</div>`;
+    }
 }
 
 function updateMobileCartOverlayIfVisible() {
@@ -94,44 +126,73 @@ function updateMobileCartOverlayIfVisible() {
 function updateMobileCartOverlayContent() {
     const overlayContent = document.getElementById('cart_content_overlay');
     const overlayTotal = document.getElementById('cart_total_overlay');
-    let overlayHTML = '';
-    let overlayTotalPrice = 0;
+
+    const { html, total } = generateMobileCartHTML();
+
+    overlayContent.innerHTML = html;
+    overlayTotal.innerHTML = 'Gesamtpreis: ' + total.toFixed(2).replace('.', ',') + ' €';
+}
+
+function generateMobileCartHTML() {
+    let html = '';
+    let total = 0;
 
     if (shoppingCart.length === 0) {
-        overlayHTML = 'Nichts ausgewählt.';
+        html = 'Nichts ausgewählt.';
     } else {
-        for (let i = 0; i < shoppingCart.length; i++) {
-            overlayHTML += generateCartItem(shoppingCart[i]);
-            overlayTotalPrice += shoppingCart[i].price * shoppingCart[i].amount;
-        }
-
-        if (overlayTotalPrice < 25) {
-            overlayTotalPrice += 4.99;
-            overlayHTML += `<div class="delivery-cost">Lieferkosten: 4,99 €</div>`;
-        } else {
-            overlayHTML += `<div class="delivery-cost free">Lieferkosten: Kostenlos</div>`;
-        }
+        ({ html, total } = buildMobileCartItemsAndTotal());
+        html += generateDeliveryCostHTML(total);
+        if (total < 25) total += 4.99;
     }
 
-    overlayContent.innerHTML = overlayHTML;
-    overlayTotal.innerHTML = 'Gesamtpreis: ' + overlayTotalPrice.toFixed(2).replace('.', ',') + ' €';
+    return { html, total };
+}
+
+function buildMobileCartItemsAndTotal() {
+    let html = '';
+    let total = 0;
+
+    for (let i = 0; i < shoppingCart.length; i++) {
+        html += generateCartItem(shoppingCart[i]);
+        total += shoppingCart[i].price * shoppingCart[i].amount;
+    }
+
+    return { html, total };
+}
+
+function generateDeliveryCostHTML(total) {
+    if (total < 25) {
+        return `<div class="delivery-cost">Lieferkosten: 4,99 €</div>`;
+    } else {
+        return `<div class="delivery-cost free">Lieferkosten: Kostenlos</div>`;
+    }
 }
 
 function refreshCartBadge() {
-    let badge = document.getElementById('cart-badge');
-    let amount = 0;
+    let amount = calculateCartAmount();
+    updateDesktopCartBadge(amount);
+    updateMobileCartCount(amount);
+}
 
+function calculateCartAmount() {
+    let amount = 0;
     for (let i = 0; i < shoppingCart.length; i++) {
         amount += shoppingCart[i].amount;
     }
+    return amount;
+}
 
+function updateDesktopCartBadge(amount) {
+    let badge = document.getElementById('cart-badge');
     if (amount > 0) {
         badge.style.display = 'inline-block';
         badge.innerHTML = `(${amount})`;
     } else {
         badge.style.display = 'none';
     }
+}
 
+function updateMobileCartCount(amount) {
     let mobileCount = document.getElementById('cart-mobile-count');
     if (mobileCount) {
         mobileCount.innerText = amount;
@@ -140,22 +201,16 @@ function refreshCartBadge() {
 
 function clearShoppingCart() {
     shoppingCart = [];
+    saveCartToLocalStorage();
     updateCartDisplay();
 }
 
-
 function placeOrder() {
-    if (shoppingCart.length === 0) {
-        return;
-    }
+    if (shoppingCart.length === 0) return;
 
     clearShoppingCart();
     showPopup('thanks-popup');
-
-    const overlay = document.getElementById('mobile-cart-overlay');
-    if (overlay && overlay.style.display === 'flex') {
-        overlay.style.display = 'none';
-    }
+    document.getElementById('mobile-cart-overlay').style.display = 'none';
 }
 
 function showPopup(id) {
@@ -254,27 +309,46 @@ function toggleMobileCartOverlay() {
 function updateMobileCartOverlayContent() {
     const content = document.getElementById('cart_content_overlay');
     const total = document.getElementById('cart_total_overlay');
+
+    const { html, totalPrice } = generateOverlayCartHTML();
+
+    content.innerHTML = html;
+    total.innerHTML = 'Gesamtpreis: ' + totalPrice.toFixed(2).replace('.', ',') + ' €';
+}
+
+function generateOverlayCartHTML() {
     let html = '';
     let totalPrice = 0;
 
     if (shoppingCart.length === 0) {
         html = 'Nichts ausgewählt.';
     } else {
-        for (let i = 0; i < shoppingCart.length; i++) {
-            html += generateCartItem(shoppingCart[i]);
-            totalPrice += shoppingCart[i].price * shoppingCart[i].amount;
-        }
-
-        if (totalPrice < 25) {
-            totalPrice += 4.99;
-            html += `<div class="delivery-cost">Lieferkosten: 4,99 €</div>`;
-        } else {
-            html += `<div class="delivery-cost free">Lieferkosten: Kostenlos</div>`;
-        }
+        ({ html, totalPrice } = buildOverlayCartItemsAndTotal());
+        html += generateOverlayDeliveryCostHTML(totalPrice);
+        if (totalPrice < 25) totalPrice += 4.99;
     }
 
-    content.innerHTML = html;
-    total.innerHTML = 'Gesamtpreis: ' + totalPrice.toFixed(2).replace('.', ',') + ' €';
+    return { html, totalPrice };
+}
+
+function buildOverlayCartItemsAndTotal() {
+    let html = '';
+    let totalPrice = 0;
+
+    for (let i = 0; i < shoppingCart.length; i++) {
+        html += generateCartItem(shoppingCart[i]);
+        totalPrice += shoppingCart[i].price * shoppingCart[i].amount;
+    }
+
+    return { html, totalPrice };
+}
+
+function generateOverlayDeliveryCostHTML(totalPrice) {
+    if (totalPrice < 25) {
+        return `<div class="delivery-cost">Lieferkosten: 4,99 €</div>`;
+    } else {
+        return `<div class="delivery-cost free">Lieferkosten: Kostenlos</div>`;
+    }
 }
 
 function placeOrder() {
@@ -299,5 +373,34 @@ function closeOverlay() {
     let overlay = document.getElementById('mobile-cart-overlay');
     if (overlay) {
         overlay.style.display = 'none';
+    }
+}
+
+function closeThanksPopupIfOutside(event) {
+    const popupContent = document.querySelector('#thanks-popup .popup-thanks');
+    if (!popupContent.contains(event.target)) {
+        hidePopup('thanks-popup');
+    }
+}
+
+function closeOverlayIfOutside(event) {
+    const overlay = document.getElementById('mobile-cart-overlay');
+    const content = document.querySelector('.mobile-cart-content');
+
+    if (!content.contains(event.target)) {
+        overlay.style.display = 'none';
+    }
+}
+
+function saveCartToLocalStorage() {
+    localStorage.setItem('shoppingCart', JSON.stringify(shoppingCart));
+}
+
+function loadCartFromLocalStorage() {
+    const storedCart = localStorage.getItem('shoppingCart');
+    if (storedCart) {
+        shoppingCart = JSON.parse(storedCart);
+    } else {
+        shoppingCart = [];
     }
 }
