@@ -1,4 +1,3 @@
-//gesamtes array für die speisekarte
 const menu = [
     {
         title: 'Antipasti',

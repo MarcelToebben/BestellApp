@@ -1,4 +1,3 @@
-//html erstellen für menü kategorie mit titel, bild und leerem platz für gerichte//
 function generateMenuSection(category, index) {
     return /*html*/ `
     <section class="dish-section">
@@ -11,34 +10,31 @@ function generateMenuSection(category, index) {
   `;
 }
 
-//html erstellen für ein einzelnes gericht mit name, beschreibung, preis und hinzufügen button//
 function generateDishItem(item) {
     return /*html*/ `
     <div class="dish-item">
       <div class="dish-content">
         <h3 class="dish-name">${item.name}</h3>
         <p class="dish-description">${item.description}</p>
-        <p class="dish-price">€ ${item.price.toFixed(2).replace('.', ',')}</p>
+        <p class="dish-price">${item.price.toFixed(2).replace('.', ',')} €</p>
       </div>
       <button onclick="addDishToCart('${item.name}', ${item.price})" class="btn add-btn">+</button>
     </div>
   `;
 }
 
-//html erstellen für den warenkorb eintrag mit menge, preis hinzufügen und wegnehmen button//
-function generateCartItem(item) {
-  const total = item.price * item.amount;
-  return /*html*/ `
-    <div class="cart-item">
-      <div class="cart-details">
-        <span class="cart-name">${item.amount}× ${item.name}</span>
-        <span class="cart-price">€ ${total.toFixed(2).replace('.', ',')}</span>
-      </div>
-      <div class="cart-controls">
-        <button onclick="addDishToCart('${item.name}', ${item.price})" class="btn add-btn">+</button>
-        <button onclick="removeDishFromCart('${item.name}', ${item.price})" class="btn remove-btn">−</button>
-      </div>
-    </div>
-    <div class="cart-divider"></div>
-  `;
+function generateCartItem(dish) {
+    return `
+        <div class="cart-item">
+            <div class="cart-info">
+                <span>${dish.name}</span>
+                <span>€ ${(dish.price * dish.amount).toFixed(2).replace('.', ',')}</span>
+            </div>
+            <div class="cart-controls">
+                <button onclick="removeDishFromCart('${dish.name}', ${dish.price})">−</button>
+                <span>${dish.amount}</span>
+                <button onclick="addDishToCart('${dish.name}', ${dish.price})">+</button>
+            </div>
+        </div>
+    `;
 }

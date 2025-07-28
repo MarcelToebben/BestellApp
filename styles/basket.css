@@ -1,15 +1,16 @@
 .cart-sidebar {
   position: fixed;
-  top: 0;
   right: 0;
   width: 300px;
-  height: 100vh;
+  height: auto;
+  max-height: 370px;
   background-color: #fff;
   border-left: 1px solid #ddd;
   padding: 20px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
   z-index: 1000;
+  top: 396px;
 }
 
 .cart-sidebar h2 {
@@ -46,6 +47,98 @@
   background-color: #444;
 }
 
-.menu-sections {
-  margin-right: 320px; 
+.cart-item {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-info {
+  display: flex;
+  flex-direction: column;
+  max-width: 180px;
+}
+
+.cart-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cart-controls button {
+  background: orange;
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-controls span {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.delivery-cost {
+  margin-top: 12px;
+  font-style: italic;
+}
+
+.delivery-cost.free {
+  color: green;
+}
+
+.cart-badge.cart-feedback {
+  animation: pulse 0.3s ease;
+}
+
+.cart-mobile {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background-color: orange;
+  color: white;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 30px;
+  position: fixed;
+  bottom: 46px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 75%;
+}
+
+.mobile-cart-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-cart-content {
+  background-color: #fff;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+}
+
+#cart-badge {
+  display: none !important;
 }
